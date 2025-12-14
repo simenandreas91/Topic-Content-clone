@@ -98,8 +98,8 @@ mark {
   }
 
   .title-item-filters {
-    width: 100%;
-    flex: 1 0 auto;
+    width: auto;
+    flex: 0 1 auto;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -147,6 +147,7 @@ mark {
       }
     
     .title-item-filters {
+      width: 100%;
       align-items: initial;
 
       select {
@@ -237,7 +238,7 @@ mark {
 
   .box-header-title {
     display: flex;
-    margin: 0 10px;
+    margin: 20px 10px;
     flex-wrap: wrap;
 
     .search-results-container {
@@ -268,14 +269,14 @@ mark {
   }
 
   .box-header-title:first-of-type {
-    padding-top: 1rem;
+    padding-top: 0.5rem;
   }
 
   .header-with-title {
-    align-items: center;
+    align-items: flex-start;
     gap: $sp-space--lg;
     flex-wrap: wrap;
-    padding-top: 0.75rem;
+    padding-top: 0.25rem;
 
     .title-item {
       flex: 1 1 auto;
@@ -294,7 +295,7 @@ mark {
   }
 
   .header-with-title {
-    align-items: flex-end;
+    align-items: flex-start;
     gap: $sp-space--lg;
     flex-wrap: wrap;
 
