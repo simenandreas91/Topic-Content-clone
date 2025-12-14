@@ -1,0 +1,205 @@
+<div class="browse-content-container">
+  <div ng-class="data.isMobileApp ? 'browse-elevation-mobile': 'browse-elevation'" ng-if = "contentItems.length > 0 || data.showEmptyState === 'true'">
+
+    <div class="box-header-title p-v-2 header-with-title">
+      <h3 class="title-item">{{data.widgetTitle}}</h3>
+      <div ng-if="!data.isMobileApp" class="title-item-filters"
+        ng-class="{'item-fitlers-disable': (contentItems.length === 0 && data.filterBy ==='')}">
+        <div class="flex-mobile m-r-auto" ng-if="isSearchModeEnabled && !data.lockFilter">
+          <label class="label-padding" for="filter_picker_select">${Filter by}</label>
+          <select id="filter_picker_select" ng-disabled="contentItems.length === 0 && data.filterBy ===''"
+            class="form-control" name="filter_picker_select" ng-model="data.aisFilterBy" title="${Filter by}"
+            ng-change="getUpdatedContent()" aria-label="${Filter by}"
+            ng-options="item.sysId as item.name for item in aisFilterOptions" />
+        </div>
+
+        <div class="flex-mobile m-r-auto" ng-if="!isSearchModeEnabled && !data.lockFilter">
+          <label class="label-padding" for="filter_picker_select">${Filter by}</label>
+          <select id="filter_picker_select" ng-disabled="contentItems.length === 0 && data.filterBy ===''"
+            class="form-control" name="filter_picker_select" ng-model="data.filterBy" title="${Filter by}"
+            ng-change="getUpdatedContent()" aria-label="${Filter by}"
+            ng-options="item.sysId as item.name for item in data.filterOptions" />
+        </div>
+
+        <div class="flex-mobile filter-search">
+          <div class="flex-mobile" ng-if="isSearchModeEnabled" ng-class="{'filter-padding' : !data.aisEnabledUtah}">
+            <label class="label-padding" for="sort_picker_select">${Sort by}</label>
+            <select id="sort_picker_select" class="form-control"
+              ng-disabled="contentItems.length === 0 && data.filterBy ===''" name="sort_picker_select"
+              ng-model="data.aisSortBy" ng-change="getUpdatedContent()"
+              ng-options="item.id as item.name for item in aisSortOptions" />
+          </div>
+          <div class="flex-mobile" ng-if="!isSearchModeEnabled" ng-class="{'filter-padding' : !data.aisEnabledUtah}">
+            <label class="label-padding" for="sort_picker_select">${Sort by}</label>
+            <select id="sort_picker_select" class="form-control"
+              ng-disabled="contentItems.length === 0 && data.filterBy ===''" name="sort_picker_select"
+              ng-model="data.sortBy" ng-change="getUpdatedContent()"
+              ng-options="item.id as item.name for item in data.sortOptions" />
+          </div>
+          <div ng-if="data.aisEnabledUtah">
+            <widget id="ais_topic_search" options='data.searchWidgetInitOptions'>
+            </widget>
+          </div>
+          <div class="view-controls" ng-if="!data.isMobile">
+            <div class="pull-right padder-t-sm text-lg toggle" role="group" aria-label="${Select a view}">
+              <button id="tab-card" ng-disabled="contentItems.length === 0 && data.filterBy ===''" class="fa fa-th btn"
+                ng-click="changeView('card')" ng-keydown="switchTab($event)" ng-class="data.view == 'card' ? 'btn-primary' : 'btn-default'"
+                title="${Card View}" data-toggle="{{!isTouchDevice() ? 'tooltip' : undefined}}" data-placement="top"
+                data-container="body" aria-label="${Card View}"
+                ng-attr-aria-controls="{{data.view == 'card' ? 'tabpanel-card-' + (data.sys_id ? data.sys_id : '') : undefined}}"
+                aria-pressed="{{data.view == 'card'}}"></button>
+              <button id="tab-list" ng-disabled="contentItems.length === 0 && data.filterBy ===''" class="fa fa-list-ul btn"
+                ng-click="changeView('list')" ng-keydown="switchTab($event)" ng-class="data.view == 'list' ? 'btn-primary' : 'btn-default'"
+                title="${List View}" data-toggle="{{!isTouchDevice() ? 'tooltip' : undefined}}" data-placement="top"
+                data-container="body" aria-label="${List View}"
+                ng-attr-aria-controls="{{ data.view == 'list' || data.isMobileApp ? 'tabpanel-list-' + (data.sys_id ? data.sys_id : '') : undefined}}"
+                aria-pressed="{{data.view == 'list'}}"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-if="data.isMobileApp" class="title-item-filters"
+        ng-class="{'item-fitlers-disable': (contentItems.length === 0 && data.filterBy ==='')}">
+        
+        <div class="flex-mobile form-inline" ng-if="!isSearchModeEnabled && !data.lockFilter">
+          <label class="aisearch-mobile-weight" for="filter_picker_select">${Filter by}</label>
+          <select  id="filter_picker_select" ng-disabled="contentItems.length === 0 && data.filterBy ===''"
+          class="sn-select-basic full-width-drop-down" name="filter_picker_select" ng-model="data.filterBy" title="${Filter by}"
+            ng-change="getUpdatedContent()" aria-label="${Filter by}">
+            <option ng-repeat="item in data.filterOptions" value={{::item.sysId}}>{{::item.name}}</option>
+          </select>
+        </div>
+        
+        <div class="flex-mobile form-inline" ng-if="isSearchModeEnabled && !data.lockFilter">
+          <label class="aisearch-mobile-weight" for="filter_picker_select">${Filter by}</label>
+          <select id="filter_picker_select" ng-disabled="contentItems.length === 0 && data.filterBy ===''"
+          class="sn-select-basic full-width-drop-down" name="filter_picker_select" ng-model="data.aisFilterBy" title="${Filter by}"
+            ng-change="getUpdatedContent()" aria-label="${Filter by}">
+            <option ng-repeat="item in aisFilterOptions" value={{::item.sysId}}>{{::item.name}}</option>
+          </select>
+        </div>
+        
+        <div class="flex-mobile form-inline" ng-if="isSearchModeEnabled">
+          <label class="aisearch-mobile-weight" for="sort_picker_select">${Sort by}</label>
+          <select id="sort_picker_select" class="sn-select-basic full-width-drop-down"
+            ng-disabled="contentItems.length === 0 && data.filterBy ===''" name="sort_picker_select"
+			      ng-model="data.aisSortBy" ng-change="getUpdatedContent()">
+            <option ng-repeat="item in aisSortOptions" value={{::item.id}}>{{::item.name}}</option>
+
+        </select>
+        </div>
+        
+        <div class="flex-mobile form-inline" ng-if="!isSearchModeEnabled">
+          <label class="aisearch-mobile-weight" for="sort_picker_select">${Sort by}</label>
+          <select id="sort_picker_select" class="sn-select-basic full-width-drop-down"
+			ng-disabled="contentItems.length === 0 && data.filterBy ===''" name="sort_picker_select"
+			ng-model="data.sortBy" ng-change="getUpdatedContent()">
+      <option ng-repeat="item in data.sortOptions" value={{::item.id}}>{{::item.name}}</option>
+    </select>
+          </div>
+        <div ng-if="data.aisEnabledUtahMobile && contentItems.length > 0" class="aiseach-mobile-padding">
+            <widget id="ais_topic_search" options='data.searchWidgetInitOptions'>
+            </widget>
+          </div>
+      </div>
+    </div>
+
+    <div class="box-header-title spellcheck-container" ng-class="{'aiseach-mobile-spellcheck-adjust': data.isMobileApp}" ng-if="isSearchModeEnabled" aria-live="polite">
+      <div class="search-results-container" ng-if="searchedTerm && spellCorrectedTerm && !loading">
+        <div ng-if="spellCorrectedTerm && !data.isMobileApp">${Showing results for}<button class="btn-link" ng-click="handleCorrectedSearch(spellCorrectedTerm, 'spell-corrected-term')">{{spellCorrectedTerm}}</button>
+        </div>
+        <div ng-if="searchedTerm && !data.isMobileApp">${Search instead for}<button class="btn-link" ng-click="handleCorrectedSearch(searchedTerm, 'search-term')">{{searchedTerm}}</button></div>
+      </div>
+      <div ng-if="!data.isMobileApp" class="clear-search-container">
+        <button class="btn btn-link" ng-click="clearSearch()">{{::data.clearSearchBtn}}</button>
+      </div>
+      <i ng-if="data.isMobileApp" ng-click="clearSearch()" class="fa fa-times-circle fa-lg aisearch-reset-blend" aria-label="${Reset Search}"></i>
+    </div>
+
+    <div aria-live="polite" class="sr-only">
+      <span ng-if="isSearchModeEnabled">
+        <span ng-if="loading">${Loading new items}</span>
+        <span ng-if="!loading && noOfNewItems > 0">{{newItemsAnnouncement}}</span>
+        <span ng-if="!loading && noOfNewItems == 0">${No results match your criteria}</span>
+      </span>
+    </div>
+
+    <ul
+      id="{{ data.view == 'list' || data.isMobileApp ? 'tabpanel-list-' + data.sys_id  : 'tabpanel-card-' + data.sys_id }}"
+      class="grid-margin" ng-class="data.view == 'list' || data.isMobileApp ? 'list-view-block': 'grid-test-auto-wrap'">
+      <li ng-if="!loading || data.action ==='show-more' || data.action === 'modify-ais-results'" class="flex-item-card"
+        ng-class="data.view == 'list' ? 'list-view': ''" ng-repeat="item in getContentItems(); track by item.sys_id"
+        on-finish-repeat="ngRepeatFinishedContentCards">
+        <span ng-if="isSearchModeEnabled" id="count_{{item.content}}" class="aria-labelled-by-hidden">${Item {{$index + 1}} of {{aisContentItems.length}}, }</span>
+        <span ng-if="!isSearchModeEnabled" id="count_{{item.content}}" class="aria-labelled-by-hidden">${Item {{$index + 1}} of {{data.content.length}}, }</span>
+        <div class="flex-display">
+          <sp-widget widget="item.widgetData"></sp-widget>
+        </div>
+      </li>
+      <li ng-if="loading" class="flex-item-card skeleton-loading" ng-class="data.view == 'list' ? 'list-view': ''"
+        ng-repeat="item in [1,2,3,4,5,6,7,8,9,10,11,12]">
+        <span class="skeleton-loader badge-loader"></span>
+        <div class="flex-column text-items">
+          <div class="skeleton-loader title-loader"></div>
+          <div class="skeleton-loader description-loader"></div>
+          <div class="skeleton-loader additional-info-loader"></div>
+          <div class="empty"></div>
+        </div>
+      </li>
+    </ul>
+    <div ng-if="!isSearchModeEnabled">
+      <div class="content-align-center" ng-if="data.filterBy !=='' && contentItems.length === 0">
+        <img src="5c50c822c3e930102ec1a589a840dd7b.iix" />
+        <p ng-bind-html="data.noContentMessage">
+        </p>
+        <p>
+          ${Try another search or remove some filters.}
+        </p>
+      </div>
+      <div class="content-align-center" ng-if="(!data.isMobileApp && contentItems.length === 0 && data.filterBy ==='')">
+        <img src="5c50c822c3e930102ec1a589a840dd7b.iix" />
+        <p>
+          ${No content available}
+        </p>
+      </div>
+      <div class="content-align-center" ng-if="(data.isMobileApp && contentItems.length === 0 && data.filterBy ==='')"
+        ng-bind-html="data.mobileNoContentMessage" />
+      <div ng-if="data.showMore">
+        <button class="btn btn-default btn-loadmore" ng-click="loadMore()" ng-keydown="loadMoreKeydown($event)">
+          {{data.showMoreMsg}}
+        </button>
+      </div>
+    </div>
+
+    <div ng-if="isSearchModeEnabled">
+      <div ng-if="data.isMobileApp ? showMoreFlagMobileSearch : hasNext">
+        <button class="btn btn-default btn-loadmore" ng-click="loadMore()" ng-keydown="loadMoreKeydown($event)">
+          ${Show more}
+        </button>
+      </div>
+      <div ng-if="data.showRedirectToGlobal && aisContentItems.length !== 0 && !data.isMobileApp">
+        <div ng-include="'sn-ec-global-search-redirect'" class="content-align-center expand-search-container"></div>
+
+      </div>
+      <div ng-if="aisContentItems.length === 0 && !loading" class="content-align-center search-no-results-container">
+        <i ng-if="!data.isMobileApp" class="fa fa-search"></i>
+        <img ng-if="data.isMobileApp"
+           ng-src={{c.data.mespEmptyStateImage}}
+           class="mesp-image-resize">
+        <h4 ng-if="!data.isMobileApp">${No results match your criteria.}</h4>
+        <h4 ng-if="data.isMobileApp">${No results match your criteria}</h4>
+        <div ng-if="!data.isMobileApp">
+          <p>${You might find more results with a global search.}</p>
+          <a ng-if="data.showRedirectToGlobal" class="btn btn-primary" role="button" ng-href="{{getExpandSearchURL()}}"
+            aria-labelledby="{{data.expandSearchLink}}" title="{{data.expandSearchLink}}" ng-click="setSessionData()">
+            ${Expand your search}
+            <span class="sr-only" id="{{data.expandSearchLink}}-ext-link}" ng-if="(item.target == '_blank')">${, opens
+              in a new window}
+            </span>
+          </a>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+</div>
