@@ -2,7 +2,15 @@
   <div ng-class="data.isMobileApp ? 'browse-elevation-mobile': 'browse-elevation'" ng-if = "contentItems.length > 0 || data.showEmptyState === 'true'">
 
     <div class="box-header-title p-v-2 header-with-title">
-      <h3 class="title-item">{{data.widgetTitle}}</h3>
+      <h3 class="title-item">
+        {{data.widgetTitle}}
+        <span class="title-icon" ng-if="c.getTitleIconType() === 'kb'">
+          <i class="fa fa-book" aria-hidden="true"></i>
+        </span>
+        <span class="title-icon" ng-if="c.getTitleIconType() === 'request'">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        </span>
+      </h3>
       <div ng-if="!data.isMobileApp" class="title-item-filters"
         ng-class="{'item-fitlers-disable': (contentItems.length === 0 && data.filterBy ==='')}">
         <div class="flex-mobile m-r-auto" ng-if="isSearchModeEnabled && !data.lockFilter">

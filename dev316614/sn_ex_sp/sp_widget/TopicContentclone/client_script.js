@@ -200,6 +200,22 @@ api.controller = function($timeout, $rootScope, $scope, $window, snAnalytics, sp
         $window.sessionStorage.setItem("aisSearchParams", JSON.stringify(aisSearchParams));
     };
 
+    c.getTitleIconType = function() {
+        var filterBy = c.data.filterBy || '';
+        var options = c.data.filterOptions || [];
+        var selected = options.filter(function(option) {
+            return (option.sysId || '') === filterBy;
+        })[0];
+        var contentTable = selected ? selected.contentTable : '';
+        if (contentTable === 'kb_knowledge') {
+            return 'kb';
+        }
+        if (contentTable === 'sc_cat_item') {
+            return 'request';
+        }
+        return '';
+    };
+
     c.createAppseeEvent = function() {
         var payload = {};
         payload.name = 'Topic Page Visits';
